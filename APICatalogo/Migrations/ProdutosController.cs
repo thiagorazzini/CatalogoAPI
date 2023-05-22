@@ -2,6 +2,7 @@
 using APICatalogo.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APICatalogo.Migrations
 {
@@ -52,5 +53,19 @@ namespace APICatalogo.Migrations
                 new { id = produto.ProdutoId }, produto);
         }
 
+        [HttpPut("/produtos/{id:int}")]
+        public ActionResult Put(int id, Produto produto)
+        {
+            if(id != produto.ProdutoId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(produto).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok(produto);
+
+        }
     }
 }
